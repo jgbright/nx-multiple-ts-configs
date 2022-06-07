@@ -1,94 +1,106 @@
+This repo demonstrates setting up an nx workspace with 1 react app and 1 react lib.  The app uses the lib, but there is a problem.  The lib uses tsconfig options that are not the same as the options used in the app.  As a result, the lib will build, but the app will not.  I expected the lib to use the lib project's tsconfig settings - both when built separately and when built as part of the app.
+
+Below is a transcript of commands run against this repo on my local dev environment.
+
+```
+➜ npx nx build mylib
+
+> nx run mylib:build
+
+Bundling mylib...
+  index.js 169.899 KB
+⚡ Done in 2.77s
+
+ ———————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————— 
+
+ >  NX   Successfully ran target build for project mylib (5s)
+
+ C:\Repos\nx-multiple-ts-configs :: main ≢  ~1 |  ~1                                                         |  18.2.0 |  100  | 10:29:49  
+```
+
+```
+➜ npx nx build myapp
+
+   √    1/1 dependent project tasks succeeded [1 read from cache]
+
+   Hint: you can run the command with --verbose to see the full dependent project outputs
+
+ ———————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————— 
 
 
-# Myorg
+> nx run myapp:build:production
 
-This project was generated using [Nx](https://nx.dev).
+Entrypoint main = runtime.195b16c2abc3ca51.esm.js main.28f8bfdb362002b8.esm.js
+Entrypoint polyfills = runtime.195b16c2abc3ca51.esm.js polyfills.c186bccd5f5b49b2.esm.js
+chunk (runtime: runtime) main.28f8bfdb362002b8.esm.js (main) 266 KiB [initial] [rendered]
+chunk (runtime: runtime) polyfills.c186bccd5f5b49b2.esm.js (polyfills) 296 KiB [initial] [rendered]
+chunk (runtime: runtime) runtime.195b16c2abc3ca51.esm.js (runtime) 4.4 KiB [entry] [rendered]
 
-<p style="text-align: center;"><img src="https://raw.githubusercontent.com/nrwl/nx/master/images/nx-logo.png" width="450"></p>
+ERROR in libs/mylib/src/lib/Mylib.tsx:10:21
+TS7030: Not all code paths return a value.
+     8 | `;
+     9 |
+  > 10 | const getSomeText = (capitalized?: boolean) => {
+       |                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    11 |   if (!capitalized) {
+    12 |     return 'some text';
+    13 |   }
 
-🔎 **Smart, Fast and Extensible Build System**
+webpack compiled with 1 error (c434bf571afd5d76)
+ENOENT: no such file or directory, open 'dist\apps\myapp\index.html'
 
-## Adding capabilities to your workspace
+ ———————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————— 
 
-Nx supports many plugins which add capabilities for developing different types of applications and different tools.
+ >  NX   Ran target build for project myapp and 1 task(s) it depends on (13s)
 
-These capabilities include generating applications, libraries, etc as well as the devtools to test, and build projects as well.
+    ×    1/2 failed
+    √    1/2 succeeded [1 read from cache]
 
-Below are our core plugins:
+ C:\Repos\nx-multiple-ts-configs :: main ≢  ~1 |  ~1                                                         |  18.2.0 |  100  | 10:30:12  
+➜
+```
 
-- [React](https://reactjs.org)
-  - `npm install --save-dev @nrwl/react`
-- Web (no framework frontends)
-  - `npm install --save-dev @nrwl/web`
-- [Angular](https://angular.io)
-  - `npm install --save-dev @nrwl/angular`
-- [Nest](https://nestjs.com)
-  - `npm install --save-dev @nrwl/nest`
-- [Express](https://expressjs.com)
-  - `npm install --save-dev @nrwl/express`
-- [Node](https://nodejs.org)
-  - `npm install --save-dev @nrwl/node`
+```
+➜ nx report
 
-There are also many [community plugins](https://nx.dev/community) you could add.
+ >  NX   Running global Nx CLI with PNPM may have issues.
 
-## Generate an application
-
-Run `nx g @nrwl/react:app my-app` to generate an application.
-
-> You can use any of the plugins above to generate applications as well.
-
-When using Nx, you can create multiple applications and libraries in the same workspace.
-
-## Generate a library
-
-Run `nx g @nrwl/react:lib my-lib` to generate a library.
-
-> You can also use any of the plugins above to generate libraries as well.
-
-Libraries are shareable across libraries and applications. They can be imported from `@myorg/mylib`.
-
-## Development server
-
-Run `nx serve my-app` for a dev server. Navigate to http://localhost:4200/. The app will automatically reload if you change any of the source files.
-
-## Code scaffolding
-
-Run `nx g @nrwl/react:component my-component --project=my-app` to generate a new component.
-
-## Build
-
-Run `nx build my-app` to build the project. The build artifacts will be stored in the `dist/` directory. Use the `--prod` flag for a production build.
-
-## Running unit tests
-
-Run `nx test my-app` to execute the unit tests via [Jest](https://jestjs.io).
-
-Run `nx affected:test` to execute the unit tests affected by a change.
-
-## Running end-to-end tests
-
-Run `nx e2e my-app` to execute the end-to-end tests via [Cypress](https://www.cypress.io).
-
-Run `nx affected:e2e` to execute the end-to-end tests affected by a change.
-
-## Understand your workspace
-
-Run `nx graph` to see a diagram of the dependencies of your projects.
-
-## Further help
-
-Visit the [Nx Documentation](https://nx.dev) to learn more.
+   Prefer to use "pnpm" (https://pnpm.io/cli/exec) to execute commands in this workspace.
+    TIP  create a shortcut such as: doskey pnx=pnpm nx -- $*
 
 
 
-## ☁ Nx Cloud
+ >  NX   Report complete - copy this into the issue template
 
-### Distributed Computation Caching & Distributed Task Execution
+   Node : 18.2.0
+   OS   : win32 x64
+   pnpm : 6.32.17
 
-<p style="text-align: center;"><img src="https://raw.githubusercontent.com/nrwl/nx/master/images/nx-cloud-card.png"></p>
+   nx : 14.1.9
+   @nrwl/angular : Not Found
+   @nrwl/cypress : 14.1.9
+   @nrwl/detox : Not Found
+   @nrwl/devkit : Not Found
+   @nrwl/eslint-plugin-nx : 14.1.9
+   @nrwl/express : Not Found
+   @nrwl/jest : 14.1.9
+   @nrwl/js : Not Found
+   @nrwl/linter : 14.1.9
+   @nrwl/nest : Not Found
+   @nrwl/next : Not Found
+   @nrwl/node : Not Found
+   @nrwl/nx-cloud : Not Found
+   @nrwl/nx-plugin : Not Found
+   @nrwl/react : 14.1.9
+   @nrwl/react-native : Not Found
+   @nrwl/schematics : Not Found
+   @nrwl/storybook : Not Found
+   @nrwl/web : 14.1.9
+   @nrwl/workspace : 14.1.9
+   typescript : 4.6.4
+   ---------------------------------------
+   Community plugins:
 
-Nx Cloud pairs with Nx in order to enable you to build and test code more rapidly, by up to 10 times. Even teams that are new to Nx can connect to Nx Cloud and start saving time instantly.
-
-Teams using Nx gain the advantage of building full-stack applications with their preferred framework alongside Nx’s advanced code generation and project dependency graph, plus a unified experience for both frontend and backend developers.
-
-Visit [Nx Cloud](https://nx.app/) to learn more.
+ C:\Repos\nx-multiple-ts-configs :: main ≢  ~1                                                                |  18.2.0 |  100  | 10:31:20  
+➜
+```
